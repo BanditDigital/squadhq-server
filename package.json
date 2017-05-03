@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "watch": "nodemon ./bin/www",
-    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha ./**/*.test.js",
+    "start": "node ./app/server/",
+    "watch": "nodemon ./app/server/",
+    "test": "SET \"NODE_ENV=test\" && mocha ./app/**/*.test.js --recursive",
     "test-watch": "nodemon --exec \"npm test\"",
     "apidoc": "apidoc",
-    "docs": "apidoc -i src/ -o docs/",
+    "docs": "apidoc -i / -o docs/",
     "postinstall": "npm run docs",
     "deploy": "git push heroku master"
   },

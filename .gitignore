@@ -54,3 +54,5 @@ node_modules/
 
 ##Docs
 docs/
+
+npm-debug.log
