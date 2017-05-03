@@ -1,11 +1,23 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
-var app = express();
+const config = require('./src/config');
+console.log(`Application running in ${config.NODE_ENV} mode.`)
+
+const {mongoose} = require('./db/mongoose');
+let db = mongoose.connection;
+db.on('error', function() {
+  console.error.bind(console, 'connection error:')
+});
+
+db.once('open', function() {
+    console.log(`Connected to mongo at ${config.MONGODB_URI}`);
+});
+
+const app = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -15,20 +27,14 @@ app.use(express.static(path.join(__dirname, 'docs')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
+app.use(function(err, req, res) {
   res.status(err.status || 500);
-  res.render('error');
 });
 
 module.exports = app;
